@@ -2,6 +2,8 @@ const INTERVAL_PURGE_OLD_USERS = 2 * 1000;
 const TIMESPAN_RETAIN_OLD_USERS = 10 * 1000;
 const MAP_TRACK_ALPHA = 0.6;
 
+const DRAW_CHECKPOINTS = true;
+
 // contains the positions of all current racers
 let current_users = {};
 
@@ -166,6 +168,8 @@ function drawMap() {
 
         console.log(data);
         _drawMap(data);
+
+        if (DRAW_CHECKPOINTS) drawCPs();
     });
 }
 
@@ -235,6 +239,47 @@ function getPlayerGraphics(name, color) {
     app.stage.addChild(triangle);
     app.stage.addChild(text);
     return [triangle, text];
+}
+
+function drawCPs() {
+    loadCheckpoints(mapName, (checkpoints) => {
+        console.info(checkpoints);
+        checkpoints.forEach((cp) => {
+            let color;
+            switch (cp.name) {
+                case "start":
+                    color = 0x47ff00;
+                    break;
+                case "*":
+                    color = 0x1273de;
+                    break;
+                case "end":
+                    color = 0xf71015;
+                    break;
+                case "reset":
+                    color = 0xf710e3;
+                    break;
+                default:
+                    color = 0x000000;
+                    break;
+            }
+
+            let checkpoint = createCheckpoint(color);
+            checkpoint.x = cp.x - map_minmax.min.x;
+            checkpoint.y = cp.y - map_minmax.min.y;
+            checkpoint.zIndex = 3;
+            checkpoint.alpha = 0.8;
+            mapContainer.addChild(checkpoint);
+        });
+    });
+}
+
+function createCheckpoint(color) {
+    const circle = new Graphics();
+    circle.beginFill(color);
+    circle.drawCircle(0, 0, 8);
+    circle.endFill();
+    return circle;
 }
 
 //// UTIL
