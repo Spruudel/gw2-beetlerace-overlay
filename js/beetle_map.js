@@ -27,7 +27,7 @@ console.info(room);
 console.info(mapName);
 
 const socket = createMapWebocket(hostname, port, (event) =>
-    updatePosition(event.user, event.x, event.y, event.z, event.angle)
+    updatePosition(event.user, event.x, event.y, event.z, parseFloat(event.angle))
 );
 
 function updatePosition(user, x, y, z, angle) {
@@ -51,7 +51,7 @@ function updatePosition(user, x, y, z, angle) {
     let [triangle, text] = current_users[user].graphics;
     triangle.x = x - map_minmax.min.x;
     triangle.y = y - map_minmax.min.y;
-    triangle.rotation = deg_to_rad(angle);
+    triangle.angle = 360 - angle;
 
     text.x = triangle.x + 20;
     text.y = triangle.y;
@@ -277,30 +277,7 @@ function drawCPs() {
 function createCheckpoint(color) {
     const circle = new Graphics();
     circle.beginFill(color);
-    circle.drawCircle(0, 0, 8);
+    circle.drawCircle(0, 0, DEFAULT_CHECKPOINT_RADIUS);
     circle.endFill();
     return circle;
-}
-
-//// UTIL
-
-const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
-
-// input: h in [0,360] and s,v in [0,1] - output: r,g,b in [0,1]
-function hsv_to_rgb(h, s, v) {
-    let f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
-    return [f(5), f(3), f(1)];
-}
-
-function rgb_to_hex(rgb) {
-    const [r, g, b] = rgb;
-    const hex = Math.floor(r * 255).toString(16) + Math.floor(g * 255).toString(16) + Math.floor(b * 255).toString(16);
-    return parseInt(hex, 16);
-}
-
-const GOLDEN_RATIO_CONJUGATE = 0.618033988749895;
-const COLOR_BASE_VAL = Math.random();
-function get_distinct_color(n) {
-    let hue = (COLOR_BASE_VAL + n * GOLDEN_RATIO_CONJUGATE) % 1;
-    return rgb_to_hex(hsv_to_rgb(hue * 360, 0.65, 0.85));
 }
