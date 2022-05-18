@@ -16,5 +16,5 @@
 | --------- | ---------- | ------------------------------------------- | ---------------------- |
 | hostname  | _required_ | Hostname of the websocket server            | localhost              |
 | port      | _required_ | Port of the websocket server                | 1234                   |
-| room      | _required_ | Room ID to join                             | "333" or "test"        |
+| room      | _required_ | Room ID to join                             | test                   |
 | mapName   | _required_ | File name of map checkpoint file in `/maps` | DRFT-12 Celedon Circle |
