@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
-const hostname = params.get("host") ? params.get("host") : "beetlerank.com";
-const port = params.get("port") ? params.get("port") : "1234";
+const hostname = params.get("hostname");
+const port = params.get("port");
 const room = params.get("room");
 const mapName = params.get("map");
 
@@ -9,13 +9,10 @@ function throwError(msg) {
     throw new Error(msg);
 }
 
+if (!hostname) throwError("Hostname not specified");
+if (!port) throwError("Port not specified");
 if (!room) throwError("Room not specified");
 if (!mapName) throwError("Map not specified");
-
-console.info(hostname);
-console.info(port);
-console.info(room);
-console.info(mapName);
 
 let current_positions = {};
 let socket;

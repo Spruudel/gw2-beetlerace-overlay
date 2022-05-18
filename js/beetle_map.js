@@ -2,29 +2,26 @@ const INTERVAL_PURGE_OLD_USERS = 2 * 1000;
 const TIMESPAN_RETAIN_OLD_USERS = 10 * 1000;
 const MAP_TRACK_ALPHA = 0.6;
 
-const DRAW_CHECKPOINTS = true;
-
 // contains the positions of all current racers
 let current_users = {};
 
 const params = new URLSearchParams(window.location.search);
-const hostname = params.get("host") ? params.get("host") : "beetlerank.com";
-const port = params.get("port") ? params.get("port") : "1234";
+const hostname = params.get("hostname");
+const port = params.get("port");
 const room = params.get("room");
 const mapName = params.get("map");
+
+const DRAW_CHECKPOINTS = params.get("drawCheckpoints") == "1" ? true : false;
 
 function throwError(msg) {
     document.getElementById("message").innerText = msg;
     throw new Error(msg);
 }
 
+if (!hostname) throwError("Hostname not specified");
+if (!port) throwError("Port not specified");
 if (!room) throwError("Room not specified");
 if (!mapName) throwError("Map not specified");
-
-console.info(hostname);
-console.info(port);
-console.info(room);
-console.info(mapName);
 
 const socket = createMapWebsocket(hostname, port, (event) =>
     updatePosition(event.user, event.x, event.y, event.z, parseFloat(event.angle))
