@@ -26,7 +26,7 @@ console.info(port);
 console.info(room);
 console.info(mapName);
 
-const socket = createMapWebocket(hostname, port, (event) =>
+const socket = createMapWebsocket(hostname, port, (event) =>
     updatePosition(event.user, event.x, event.y, event.z, parseFloat(event.angle))
 );
 

@@ -1,6 +1,6 @@
 const test = 5;
 
-function createMapWebocket(hostname, port, consumer) {
+function createMapWebsocket(hostname, port, consumer) {
     let socket = new WebSocket(`ws://${hostname}:${port}`);
 
     socket.onopen = (e) => {

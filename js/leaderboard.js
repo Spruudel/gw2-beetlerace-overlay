@@ -25,9 +25,12 @@ loadCheckpoints(mapName, (checkpoints) => {
     console.info(checkpoints);
     const bound_updatePosition = updatePosition.bind(null, checkpoints);
 
-    socket = createMapWebocket(hostname, port, (event) => {
+    socket = createMapWebsocket(hostname, port, (event) => {
         bound_updatePosition(event.user, event.x, event.y, event.z);
     });
+
+    const countdown_btn = document.getElementById("start_race");
+    countdown_btn.addEventListener("click", startCountdown);
 });
 
 function updatePosition(checkpoints, user, x, y, z) {
@@ -104,4 +107,32 @@ function printCurrentPositions() {
 
     ${not_competing}`;
     lbDiv.innerText = lbStr;
+}
+
+function startCountdown() {
+    const countdown_input = document.getElementById("countdown_length");
+    let countdown_length = countdown_input.value;
+    let ends_on = Date.now() + countdown_length * 1000;
+
+    event = {
+        type: "countdown_start",
+        ends_on: ends_on,
+    };
+    socket.send(JSON.stringify(event));
+
+    let printInterval = setInterval(() => {
+        let seconds_left = (ends_on - Date.now()) / 1000;
+        let msg = seconds_left > 0 ? seconds_left.toFixed(2) : "GO!";
+        printCountdown(msg);
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(printInterval);
+        printCountdown("GO!");
+    }, countdown_length * 1000 + 2000);
+}
+
+function printCountdown(msg) {
+    const countdown_p = document.getElementById("countdown");
+    countdown_p.innerText = msg;
 }
