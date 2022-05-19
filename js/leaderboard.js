@@ -16,6 +16,8 @@ if (!mapName) throwError("Map not specified");
 
 let current_positions = {};
 let socket;
+let countdown_interval_id;
+let countdown_timeout_id;
 
 loadCheckpoints(mapName, (checkpoints) => {
     checkpoints = checkpoints.filter((cp) => cp.name != "reset").sort((a, b) => a.id - b.id);
@@ -117,14 +119,17 @@ function startCountdown() {
     };
     socket.send(JSON.stringify(event));
 
-    let printInterval = setInterval(() => {
+    if (countdown_interval_id) clearInterval(countdown_interval_id);
+    if (countdown_timeout_id) clearTimeout(countdown_timeout_id);
+
+    countdown_interval_id = setInterval(() => {
         let seconds_left = (ends_on - Date.now()) / 1000;
         let msg = seconds_left > 0 ? seconds_left.toFixed(2) : "GO!";
         printCountdown(msg);
     }, 50);
 
-    setTimeout(() => {
-        clearInterval(printInterval);
+    countdown_timeout_id = setTimeout(() => {
+        clearInterval(countdown_interval_id);
         printCountdown("GO!");
     }, countdown_length * 1000 + 2000);
 }
