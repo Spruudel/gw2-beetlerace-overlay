@@ -130,6 +130,7 @@ function startCountdown() {
 
     countdown_timeout_id = setTimeout(() => {
         clearInterval(countdown_interval_id);
+        current_positions = {};
         printCountdown("GO!");
     }, countdown_length * 1000 + 2000);
 }
