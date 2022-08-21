@@ -1,6 +1,6 @@
-# gw2_beetlerace_overlay
+# gw2-beetlerace-overlay
 
-Overlays to use with [gw2_speedometer](https://github.com/killer415tv/gw2_speedometer) and [gw2_beetlerace_server](https://github.com/Spruudel/gw2_beetlerace_server).
+Overlays to use with [gw2_speedometer](https://github.com/killer415tv/gw2_speedometer) and [gw2-beetlerace-server](https://github.com/Spruudel/gw2-beetlerace-server).
 
 -   `beetle_map`: transparent live map
 -   `leaderboard`: live leaderboard with ability to start a countdown for all connected clients
